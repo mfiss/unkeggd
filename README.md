@@ -7,8 +7,10 @@ This is an app I made to interact with a beer API consisting of beers and catego
 * DELETE categories and beers
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
 It uses [axios](https://github.com/axios/axios) for HTPP requests.
-It uses [Styled-Components](https://github.com/styled-components/styled-components for CSS-in-JS styling.
+
+It uses [Styled-Components](https://github.com/styled-components/styled-components) for CSS-in-JS styling.
 
 ## Getting Started
 
