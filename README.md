@@ -8,10 +8,10 @@ This is an app I made to interact with a beer API consisting of beers and catego
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 It uses:
-*[axios](https://github.com/axios/axios) for HTPP requests.
+  *[axios](https://github.com/axios/axios) for HTPP requests.
 
-*[Styled-Components](https://github.com/styled-components/styled-components) for CSS-in-JS styling.
-*[React-Router](https://github.com/ReactTraining/react-router) for routing.
+  *[Styled-Components](https://github.com/styled-components/styled-components) for CSS-in-JS styling.
+  *[React-Router](https://github.com/ReactTraining/react-router) for routing.
 
 ## Getting Started
 
