@@ -25,7 +25,7 @@ export default class App extends Component {
         query: '',
         results:[]
     }
-
+    //GET beers and categories right away, store in state, and handle errors
     componentDidMount = () => {
         axios.get(process.env.REACT_APP_API_URL+'/categories/')
             .then(res => {
@@ -46,7 +46,7 @@ export default class App extends Component {
             console.log(err)
         });
     }
-
+    // handles the Search function and errors
     getBeers = () => {
         if (this.state.search !== '') {
             axios.get(process.env.REACT_APP_API_URL+'/beers/search/?q=' + this.state.search)
@@ -70,11 +70,11 @@ export default class App extends Component {
             })
         }
     }
-
+    //Sets both key and value for state to manage Input fields
     handleInputChange = e => {
         this.setState({ [e.target.name]: e.target.value });
     }
-
+    //POST new categories
     handleAddCategory = e => {
         axios.post(process.env.REACT_APP_API_URL+'/categories/', {"name": this.state.category})
         .then(function (response) {
@@ -117,6 +117,7 @@ export default class App extends Component {
                          />
                     </StyledHeader>
                     <Switch>
+                        {/* Probably can condense Browse and DisplayResults with some shared props */}
                     <Route
                         exact path = "/SearchResults"
                         render = {(props) =>
@@ -130,6 +131,7 @@ export default class App extends Component {
                                 categories = { this.state.categories}
                                 beers = {this.state.beers}/>} 
                     />
+                    {/* "BeerPage" component renders differently based on whether or not a beer has been selected (add vs edit) */}
                       <Route
                         exact path="/beers/:beer"
                         key="edit"
@@ -145,12 +147,14 @@ export default class App extends Component {
                             <BeerPage {...props}
                             beers={[]}
                             categories={this.state.categories}
+                            adding={true}
                         /> }
                     />
                      <Route
                         exact path="/EditCategory"
                         component={EditCategory}
-                    />                    
+                    />
+                    {/* "Home" component re-used for simple text stuff with different props. Maybe rename to "content page or similar" */}
                     <Route
                         path = "/YouChangedSomething"
                         render = {(props) =>

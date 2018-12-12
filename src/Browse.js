@@ -10,15 +10,15 @@ import {
 } from './Styles'
 import { EditButton, DeleteButton } from './Buttons'
 
+//If categories exist, populate a <StyledGrid> with those options
 const AreThereOptions = props => {
     if(props.options.length > 0) {
-        console.log("there are options", props.options)
         return (
         <StyledGrid>{props.options}</StyledGrid>
         )
     } else {
-        console.log("there are no options")
         return (
+            //Handle a view with no categories
             <React.Fragment>
             <p>It looks like there aren't any beers in this category.</p>
             <StyledLinkButton onClick={props.onClick}>
@@ -33,7 +33,7 @@ const AreThereOptions = props => {
         )    
 }
 }
-
+// TODO: Make this happen inline. A separate view for an input field and submit button is probably unnecessary.
 const EditCategory = props => {
     if(!props.viewingBeers) {
         return (
@@ -48,7 +48,7 @@ export class Browse extends Component {
     state = { category : '',
               message : "Select a category"
             }
-
+    //GET categories
     componentDidMount() {
         axios.get(process.env.REACT_APP_API_URL+'/categories/')
         .then(res => {
@@ -58,15 +58,13 @@ export class Browse extends Component {
             console.log(err)
         });
         }
-
+    // When a category is clicked, set this.state.category to the value and change the message. 
+    //This is set up to potentially support nested categories
     handleClick = e => {
         if(this.state.category === ''){
         this.setState({category : e.target.value, message: "Select a beer."})
     }
 }
-    handleEditClick() {
-        console.log("You clicked Edit")
-    }
 
     handleDeleteClick = e => {
         axios.delete(e.target.value)
@@ -85,16 +83,19 @@ export class Browse extends Component {
     }
 
     render() {
+        // If no category is selected, show categories. If a category is selected, show beers from that category
         const whatToDisplay = () => {
             if (this.state.category === '') { return this.props.categories }
             else { return this.props.beers.filter(b => b.category === this.state.category)}
             }
+        // If no category is selected, route updates to a category name. If a category is selected, route to beer page
         const whereToLink = r => {
             if(this.state.category === '') { return `${this.props.match.path}/${r.name}`}
             else { return `/beers/${r.name}`}
         }
             const options = 
                 whatToDisplay()
+                //alphabetical sort
                 .sort((a, b) => a.name.toUpperCase().localeCompare(b.name.toUpperCase()))
                 .map((r, i) => {
                     return (

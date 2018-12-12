@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { Styledh2, StyledInput, StyledSmallBtn, StyledLinkButton, StyledPaddedDiv } from './Styles'
+import { Styledh2, StyledInput, StyledSmallBtn, StyledLinkButton, StyledPaddedDiv, StyledGrid } from './Styles'
 
 const InputField = props => {
-
+//TODO Replace followup link with success/error messages and maybe a link back to some other pages
     return (
         <StyledPaddedDiv>
         <h3>Edit Category</h3>
@@ -20,11 +20,13 @@ const InputField = props => {
 
 export class EditCategory extends Component {
     state = { newCategory : '' }
-
+    // Get the current category name from route, if there is one
     componentDidMount(){
+        if(this.props.location.state) {
         this.setState({ newCategory : this.props.location.state.category.name})
     }
-
+}
+    // Set up PUT body
     handleSubmit = () => {
         const body = { "name": this.state.newCategory}
 
@@ -42,7 +44,7 @@ export class EditCategory extends Component {
     }
 
     render() {
-        console.log(this.state)
+        //TODO this if statement is redundant. Refactor to handle both at once
         if(this.props.location.state) {
             
         return (
@@ -53,12 +55,14 @@ export class EditCategory extends Component {
         
         <React.Fragment>
         <Styledh2>We can't seem to find the category you wished to edit.</Styledh2>
+        <StyledGrid>
         <Link to="/Browse">
         <StyledLinkButton>
         Try again!
         </StyledLinkButton>
         </Link>
-        </React.Fragment>           
+        </StyledGrid>
+        </React.Fragment>
         )
     }
 }

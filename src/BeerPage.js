@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { StyledBeerPage } from './Styles'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { StyledSmallBtn, StyledInputRegion, StyledInput } from './Styles'
+import { StyledSmallBtn, StyledInputRegion, StyledInput, StyledBeerInputs } from './Styles'
 import { DeleteButton } from './Buttons'
 
+// If we are editing a beer, add option to delete it
 const AreWeAdding = props => {
-    if(props.adding === '/addBeers' )
+    if(props.adding === '/addBeer' )
     return null
     else return (
         <Link to="/YouChangedSomething">
@@ -26,15 +27,26 @@ export class BeerPage extends Component {
         name: '',
         style: '',
         url: '',
-        optionState: ''
+        optionState: '',
+        inputFields : [
+            "name",
+            "style",
+            "abv",
+            "ibu",
+            "calories",
+            "brewery_location"
+        ]
      }
-
+// If editing existing beer, populate fields with current info
 componentDidMount() {
-    console.log("this.state:", this.state, "this.props:", this.props, "res.data:", this.state.category)
+    this.getDefaultCategory()
+    // If passed a beer prop, GET beers
         if(this.props.match.params.beer) {
             axios.get(process.env.REACT_APP_API_URL+'/beers/')
         .then(res => {
+            // Then filter the list by beer name prop
             let newBeer = res.data.filter(b => b.name === this.props.match.params.beer)[0];
+            // If we got a beer, set the state
             if(newBeer){
             return this.setState({ 
                  abv: newBeer.abv,
@@ -45,15 +57,15 @@ componentDidMount() {
                  ibu: newBeer.ibu,
                  name: newBeer.name,
                  style: newBeer.style,
-                 url: newBeer.url,
+                 url: newBeer.url
                 })
                 
             }
         })
+        //If our state has a category, get the URL for that category and set that in state to eventually POST it
         .then(
             axios.get(process.env.REACT_APP_API_URL+'/categories/')
             .then(res => {
-
                 if(this.state.category){
                 let newOptionState = res.data.filter(r => r.url === this.state.category)[0].url;
                 return this.setState({
@@ -69,28 +81,32 @@ componentDidMount() {
 
         } else return null
     }
-
+//Get a default category to submit if user did not touch the dropdown    
+    getDefaultCategory = () => {
+        if(!this.state.optionState) {
+                
+            if(this.props.categories.length > 0) {
+                const firstCategoryOption = this.props.categories[0].url;
+                console.log(firstCategoryOption)
+                console.log("here are the props categories", this.props.categories)
+                if(!this.state.optionState && firstCategoryOption){
+                    this.setState({ optionState : firstCategoryOption})
+                }
+            }    
+        }
+    }
     handleInputChange = e => {
         this.setState({ [e.target.name]: e.target.value });
     }
-
+    // The target value is the URL, which is what's used in the beer objects
     handleDropdownChange = e => {
         this.setState({ optionState: e.target.value})
-        console.log(e.target.value, this.state)
     }
 // TODO Validate this input before submitting it
     handleSubmit = e => {
-        if(!this.state.optionState) {
-                // Setting a default option to submit if the user forgets to do the dropdown
-                if(this.props.categories.length > 0) {
-                    const firstCategoryOption = this.props.categories[0].url;
-                    console.log(firstCategoryOption)
-                    console.log("here are the props categories", this.props.categories)
-                    if(!this.state.optionState && firstCategoryOption){
-                        this.setState({ optionState : firstCategoryOption})
-                    }
-                }     
-            }   
+        this.getDefaultCategory()
+        console.log(this.state)
+            // Set up our POST body with state   
         const body = {
             "url": this.state.url,
             "name": this.state.name,
@@ -101,25 +117,35 @@ componentDidMount() {
             "brewery_location": this.state.brewery_location,
             "category": this.state.optionState
           }
+          // POST if we're adding
         if(this.props.match.path === "/addBeer") {
             axios.post(process.env.REACT_APP_API_URL+'/beers/',body)
         .then(response => { 
             console.log(response)
+            this.setState({ submitStatus : "Success!"})
         })
         .catch(error => {
-            console.log(error.response)
+            let errData = error.response.data
+            let errText = Object.values(errData)
+            console.log(errText)
+            this.setState({ submitStatus : errText})
         });
     } else {
+        // PUT if we're editing 
         axios.put(this.state.url, body)
         .then(response => { 
             console.log(response)
+            this.setState({ submitStatus : "Success!"})
         })
         .catch(error => {
-            console.log(error.response)
+            let errData = error.response.data
+            let errText = Object.values(errData)
+            console.log(errText)
+            this.setState({ submitStatus : errText})
         });
     }
     }
-
+    
     handleDeleteClick = () => {
         axios.delete(this.state.url)
         .then(function (response) {
@@ -131,63 +157,29 @@ componentDidMount() {
     }
 
     render() {
+        // Populate the dropdown with Categories by name, while populating the value with the URL
         const categoryOptions = this.props.categories.map(c => 
             <option key={c.name} value={c.url}>{c.name}</option>
         );
+        // Iterate over this.state.inputFields to create inputs and populate props
+        const InputRepeater = this.state.inputFields.map((str,i) => {
+            return (
+            <StyledInputRegion key={i}>
+            <h3>{str.toUpperCase().replace(/_/g, " ")}</h3>
+            <StyledInput  type="text"
+            name={str}
+            title={str}
+            onChange={e => this.handleInputChange(e)}
+            value={this.state[str]} />
+            </StyledInputRegion>
+            )
+        })
         return ( 
             <StyledBeerPage>
-                <StyledInputRegion>
-            <h3>Name</h3>
-     {/* TODO: Create an input component to DRY this out*/}
-            <StyledInputRegion>
-        <StyledInput type="text"
-            name="name"
-            title="name"
-            onChange={e => this.handleInputChange(e)}
-            value={this.state.name} />
-            </StyledInputRegion>
-            <StyledInputRegion>
-            <h3>Style</h3>
-            <StyledInput  type="text"
-            name="style"
-            title="style"
-            onChange={e => this.handleInputChange(e)}
-            value={this.state.style} />
-            </StyledInputRegion>
-            <StyledInputRegion>
-          <h3>Alcohol by Volume</h3>
-          <StyledInput  type="text"
-            name="abv"
-            title="abv"
-            onChange={e => this.handleInputChange(e)}
-            value={this.state.abv} />
-            </StyledInputRegion>
-        </StyledInputRegion>
-        <StyledInputRegion>            
-            <StyledInputRegion>
-            <h3>IBU</h3>
-            <StyledInput  type="text"
-            name="ibu"
-            title="ibu"
-            onChange={e => this.handleInputChange(e)}
-            value={this.state.ibu} />
-            </StyledInputRegion>
-            <StyledInputRegion>
-            <h3>Calories</h3>
-            <StyledInput  type="text"
-            name="calories"
-            title="calories"
-            onChange={e => this.handleInputChange(e)}
-            value={this.state.calories} />   
-            </StyledInputRegion>
-            <StyledInputRegion>         
-          <h4>Brewery Location</h4>
-          <StyledInput  type="text"
-            name="brewery_location"
-            title="brewery_location"
-            onChange={e => this.handleInputChange(e)}
-            value={this.state.brewery_location} /><br />
-            </StyledInputRegion>
+        <StyledInputRegion>
+            <StyledBeerInputs>
+               {InputRepeater}
+               </StyledBeerInputs>
         </StyledInputRegion>
         <StyledInputRegion>
             <br />
@@ -197,11 +189,15 @@ componentDidMount() {
                 {categoryOptions}
             </select>
             </StyledInputRegion>
-            <p>Edit the fields and submit with the button below!</p>
-            <Link to="/YouChangedSomething">   
+            <p>Edit the fields and submit with the button!</p>
+            <StyledBeerInputs>
             <StyledSmallBtn onClick={this.handleSubmit}>Submit</StyledSmallBtn>
-            </Link>
             <AreWeAdding adding={this.props.match.path} handleClick={this.handleDeleteClick} />
+            </StyledBeerInputs>
+            <br />
+            <div>
+            <p>{this.state.submitStatus}</p>
+            </div>
             </StyledInputRegion>
           </StyledBeerPage>
         )}

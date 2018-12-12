@@ -62,6 +62,7 @@ export const StyledBeerPage = styled.div`
   text-align:center;
   display:flex;
   flex-wrap:wrap;
+  justify-content:center;
 `
 
 export const StyledPaddedDiv = styled.div`
@@ -125,4 +126,10 @@ border-radius: .5rem;
 padding: .25rem;
 font-size: calc(1vw + 1vh + .5vmin);
 color: var(--primary-color, #1EA896);
+`
+
+export const StyledBeerInputs = styled.div`
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
 `
