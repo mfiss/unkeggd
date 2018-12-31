@@ -11,7 +11,7 @@ It uses:
 
 * [axios](https://github.com/axios/axios) for HTPP requests.
 * [React-Router](https://github.com/ReactTraining/react-router) for routing.
-* [Styled-Components](https://github.com/styled-components/styled-components for CSS-in-JS styling.
+* [Styled-Components](https://github.com/styled-components/styled-components) for CSS-in-JS styling.
 * [React-redux](https://github.com/reduxjs/react-redux) for state management
 * [Redux-thunk](https://github.com/reduxjs/redux-thunk) middleware for handling asynchronous logic and side effects.
 
