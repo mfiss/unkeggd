@@ -7,15 +7,17 @@ body {
     font-size:14pt;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background:#4A5A6D;
+  background:linear-gradient(#4A5A6D, #252d37);
   display:flex;
   flex-direction:column;
   flex-wrap:wrap;
   color:#F4FEFF;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 a, a:visited {
-    display: flex;
     color: #001230;
     text-decoration: none;
 }

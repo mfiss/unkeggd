@@ -1,16 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore, applyMiddleware } from 'redux'
+import Root from './components/Root'
+import rootReducer from './reducers';
+import thunk from 'redux-thunk'
 import './index.css';
-import App from './App';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 
-const routes = (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" component={App} />
-      </Switch>
-    </BrowserRouter>
-  );
-  
-  ReactDOM.render(routes, document.getElementById("root"));
+const store = createStore(
+    rootReducer,
+    applyMiddleware(thunk)
+    );
+
+render(<Root store={store} />, document.getElementById('root'))

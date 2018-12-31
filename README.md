@@ -7,15 +7,20 @@ This is an app I made to interact with a beer API consisting of beers and catego
 * DELETE categories and beers
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-It uses [axios](https://github.com/axios/axios) for HTPP requests.
-It uses [Styled-Components](https://github.com/styled-components/styled-components for CSS-in-JS styling.
+It uses: 
+
+* [axios](https://github.com/axios/axios) for HTPP requests.
+* [Styled-Components](https://github.com/styled-components/styled-components for CSS-in-JS styling.
+* [React-redux](https://github.com/reduxjs/react-redux) for state management
+* [Redux-thunk](https://github.com/reduxjs/redux-thunk) middleware for handling asynchronous logic and side effects.
+
 
 ## Getting Started
 
 Clone or download the repo
 
 ```
-git clone https://github.com/mfiss/unkeggd.git my-idea-app && cd my-idea-app
+git clone https://github.com/mfiss/unkeggd.git unkeggd-clone && cd unkeggd-clone
 
 ```
 ### Installing
