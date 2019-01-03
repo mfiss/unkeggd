@@ -67,7 +67,7 @@ export class MapItems extends Component {
                         value={'Confirm'}
                         name={'Confirm'}
                         filter={'/Categories'}
-                        flex={true}
+                        flex={'true'}
                      />
                      <StyledButton 
                         size={'small'} 
@@ -89,7 +89,7 @@ export class MapItems extends Component {
                     filter={this.props.whereToLink} 
                     value={this.props.r.name} 
                     handleClick={e => this.props.handleClick(e)}
-                    flex={true}
+                    flex={'true'}
                     />
                 <StyledSmallBtnArea>
                     {this.editButton()}
