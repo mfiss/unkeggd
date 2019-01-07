@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { postSomething, deleteSomething } from '../actions'
+import { postSomething } from '../actions'
 import { StyledCategory,
          StyledSmallBtnArea,
          StyledButton } from '../Styles'
@@ -39,13 +39,7 @@ export class MapItems extends Component {
             name : this.state.value
         }
         this.props.editFunction(postSomething(body))
-    }
-
-    handleDeleteClick = () => {
-        this.props.editFunction(deleteSomething(this.props.r.url))
-        this.props.fetchData()
-        
-    }    
+    }  
 
     render() {
         if(this.state.editing) {
@@ -96,7 +90,7 @@ export class MapItems extends Component {
                     <StyledButton
                         size={'small'} 
                         color={'delete'}
-                        onClick={this.handleDeleteClick}>
+                        onClick={() => this.props.handleDeleteClick(this.props.r)}>
                         Delete
                     </StyledButton>
                 </StyledSmallBtnArea>

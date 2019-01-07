@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { fetchCategories, fetchBeer, searchBeer, postSomething, resetSubmitStatus } from '../actions'
+import { fetchCategories, fetchBeer, searchBeer, postSomething, deleteSomething, resetSubmitStatus } from '../actions'
 import { StyledGrid,
          Styledh2, 
          StyledSmallText, 
@@ -98,13 +98,22 @@ fetchData = e => {
         this.setState({ addCategoryInput : e.target.value})
     }
 
-    handleAddClick = e => {
+    handleAddClick = () => {
         let body = {
             'name' : this.state.addCategoryInput
         }
         this.props.dispatch(postSomething(body))
-        .then(this.fetchData())
-    }
+        .then(res => {if(!this.props.items.includes(res.name)) {
+            return this.fetchData() }
+    })}
+
+    handleDeleteClick = deleteTarget => {
+        console.log("delete target", deleteTarget, "this.props.items", this.props.items)
+        this.props.dispatch(deleteSomething(deleteTarget.url))
+        .then(() => {if(this.props.items.includes(deleteTarget)) {
+            return this.fetchData() }
+
+    })}  
 
     resetSubmitStatus = () => {
         this.props.dispatch(resetSubmitStatus())
@@ -174,6 +183,7 @@ fetchData = e => {
             handleClick={this.fetchData}
             url={this.props.match.url}
             editFunction={this.props.dispatch}
+            handleDeleteClick={this.handleDeleteClick}
             fetchData={this.fetchData}
             loaded={this.props.loaded}
             />
