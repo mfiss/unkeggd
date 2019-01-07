@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import { postSomething } from '../actions'
 import { StyledCategory,
          StyledSmallBtnArea,
          StyledButton } from '../Styles'
@@ -33,14 +32,6 @@ export class MapItems extends Component {
         this.setState({ value : e.target.value });
     };
 
-    handleConfirmClick = () => {
-        let body = {
-            url : this.props.r.url,
-            name : this.state.value
-        }
-        this.props.editFunction(postSomething(body))
-    }  
-
     render() {
         if(this.state.editing) {
             return (
@@ -57,7 +48,7 @@ export class MapItems extends Component {
                      <StyledSmallBtnArea>
                      <FilterLink
                         size={'small'}
-                        handleClick={this.handleConfirmClick}
+                        handleClick={() => this.props.handleConfirmClick(this.props.r.url, this.state.value)}
                         value={'Confirm'}
                         name={'Confirm'}
                         filter={'/Categories'}

@@ -55,26 +55,6 @@ export const StyledPaddedDiv = styled.div`
   padding:2rem;
 `
 
-export const StyledAddButton = styled.button`
-background-color: var(--primary-color, #1EA896);
-color: var(--dark-color, #001230);
-border-radius: .5rem;
-cursor:pointer;
-display:flex;
-flex-wrap:wrap;
-align-items: center;
-justify-content: center;
-font-weight: bold;
-margin: .3rem;
-padding:1rem;
-font-size: calc(1vw + 1vh + .5vmin);
-transform-origin: center;
-animation: ${popin} .3s ease;
-&:hover {
-    background-color: var(--light-color, #F4FEFF);
-  }
-`
-
 export const StyledInputRegion = styled.div`
   margin:.5rem;
 `
@@ -131,9 +111,10 @@ export const StyledButton = styled.button`
 export const StyledInput = styled.input`
 margin:auto;
 border-radius: .25rem;
-padding: .25rem;
-font-size: calc(1vw + 1vh + .5vmin);
+padding: .5rem;
+font-size: 14pt;
 color: var(--primary-color, #1EA896);
+border:none;
 transform-origin: center;
 animation: ${popin} .5s ease;
 `

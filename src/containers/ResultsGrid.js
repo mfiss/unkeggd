@@ -107,6 +107,16 @@ fetchData = e => {
             return this.fetchData() }
     })}
 
+    handleConfirmClick = (categoryURL, categoryName) => {
+        let body = {
+            url : categoryURL,
+            name : categoryName
+        }
+        this.props.dispatch(postSomething(body))
+        .then(res => {if(!this.props.items.includes(res.name)) {
+            return this.fetchData() }
+    })}
+
     handleDeleteClick = deleteTarget => {
         console.log("delete target", deleteTarget, "this.props.items", this.props.items)
         this.props.dispatch(deleteSomething(deleteTarget.url))
@@ -182,7 +192,7 @@ fetchData = e => {
             whereToLink={this.whereToLink(r)}
             handleClick={this.fetchData}
             url={this.props.match.url}
-            editFunction={this.props.dispatch}
+            handleConfirmClick={this.handleConfirmClick}
             handleDeleteClick={this.handleDeleteClick}
             fetchData={this.fetchData}
             loaded={this.props.loaded}
