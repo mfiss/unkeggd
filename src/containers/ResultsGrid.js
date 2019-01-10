@@ -118,7 +118,6 @@ fetchData = e => {
     })}
 
     handleDeleteClick = deleteTarget => {
-        console.log("delete target", deleteTarget, "this.props.items", this.props.items)
         this.props.dispatch(deleteSomething(deleteTarget.url))
         .then(() => {if(this.props.items.includes(deleteTarget)) {
             return this.fetchData() }
@@ -131,7 +130,6 @@ fetchData = e => {
 
     renderSubmitStatus = () => {
         if (this.props.submitStatus) {
-            console.log(this.props.submitStatus, this.props.submitDetails)
             return(
                 <React.Fragment>
                 <Styledh2>{this.props.submitStatus}</Styledh2>
