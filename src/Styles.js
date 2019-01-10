@@ -12,7 +12,7 @@ export const StyledHeader = styled.header`
   display:flex;
   flex-wrap:wrap;
   justify-content:space-between;
-  align-items:center
+  align-items:center;
   padding:.5rem;
 `
 export const StyledGrid = styled.div`
