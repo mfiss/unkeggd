@@ -21,7 +21,7 @@ It uses:
 Clone or download the repo
 
 ```
-git clone https://github.com/mfiss/unkeggd.git unkeggd-clone && cd unkeggd-clone
+git clone https://github.com/mfiss/unkeggd.git && cd unkeggd
 
 ```
 ### Installing
