@@ -148,7 +148,6 @@ export class ConnectedBeerPage extends Component {
     });
 
     handleDeleteClick = () => {
-        console.log('delete clicked', this.props)
         this.props.dispatch(deleteSomething(this.props.selectedBeer.url))
         this.setState({})
     }
@@ -159,7 +158,6 @@ export class ConnectedBeerPage extends Component {
 
     handleDropdownChange = e => {
         this.setState({ optionState: e.target.value})
-        console.log(e.target.value, 'state:', this.state)
     }
 // TODO Validate this input before submitting it
     handleSubmit = e => {
@@ -178,11 +176,9 @@ export class ConnectedBeerPage extends Component {
             'category': emptyStringOperand(this.state.optionState, this.props.selectedBeer.category)
         }
         this.props.dispatch(postSomething(body))
-        console.log('post body:', body, 'this.state', this.state, 'this.props:', this.props)
     }   
 
     render() {
-        console.log('state:', this.state, 'props:', this.props)
         const { error, loading } = this.props;
 
         if (error) {
