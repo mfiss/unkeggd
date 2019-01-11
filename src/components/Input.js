@@ -11,9 +11,9 @@ export class Input extends Component {
                     placeholder={this.props.placeholder}
                     name={this.props.name}
                     type="text"
-                    onKeyDown={ e => {
+                    onKeyDown={e => {
                             if (e.key === 'Enter') {
-                                this.props.handleClick(e)}}}
+                                return this.props.handleClick()}}}
                     value={this.props.inputValue}
                     onChange={e => this.props.inputFunction(e)}
                 />

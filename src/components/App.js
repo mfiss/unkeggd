@@ -28,7 +28,7 @@ export default class App extends Component {
                         Add a beer
                         </StyledButton>
                         </Link>
-                        <BeerSearch />
+                        <BeerSearch currentRoute={this.props.location.pathname} />
                     </StyledHeader>
                     <Switch>
                     <Route
