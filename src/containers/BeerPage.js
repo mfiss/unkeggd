@@ -184,18 +184,19 @@ export class ConnectedBeerPage extends Component {
   handleSubmit = e => {
     //POST body gets an updated local state if user edited an input fields, or defaults to original props
     //empty string should pass, null will default to props
-    const body = {
-      submitType: 'beer',
-      url: this.props.selectedBeer.url,
-      name: this.state.name || this.props.selectedBeer.name,
-      ibu: this.state.ibu || this.props.selectedBeer.ibu,
-      calories: this.state.calories || this.props.selectedBeer.calories,
-      abv: this.state.abv || this.props.selectedBeer.abv,
-      style: this.state.style || this.props.selectedBeer.style,
-      brewery_location: this.state.brewery_location || this.props.selectedBeer.brewery_location,
-      category: this.state.optionState || this.props.selectedBeer.category,
-    }
-    this.props.dispatch(postSomething(body))
+    const emptyStringOperand = (el, fallback) => (el || el === '')  ?  el : fallback
+        const body = {
+            'submitType' :'beer',
+            'url': this.props.selectedBeer.url,
+            'name': emptyStringOperand(this.state.name, this.props.selectedBeer.name),
+            'ibu': emptyStringOperand(this.state.ibu, this.props.selectedBeer.ibu),
+            'calories': emptyStringOperand(this.state.calories, this.props.selectedBeer.calories),
+            'abv': emptyStringOperand(this.state.abv, this.props.selectedBeer.abv),
+            'style': emptyStringOperand(this.state.style, this.props.selectedBeer.style),
+            'brewery_location': emptyStringOperand(this.state.brewery_location, this.props.selectedBeer.brewery_location),
+            'category': emptyStringOperand(this.state.optionState, this.props.selectedBeer.category)
+        }
+        this.props.dispatch(postSomething(body))
   }
 
   render() {
