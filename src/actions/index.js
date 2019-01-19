@@ -23,155 +23,171 @@ export const DELETE_FAILURE = 'DELETE_FAILURE'
 export const RESET_SUBMIT_STATUS = 'RESET_SUBMIT_STATUS'
 
 export const requestCategories = () => ({
-    type: REQUEST_CATEGORIES
+  type: REQUEST_CATEGORIES,
 })
 
 export const receiveCategories = res => ({
-    type: RECEIVE_CATEGORIES,
-    res
+  type: RECEIVE_CATEGORIES,
+  res,
 })
 
 export const queryBeer = query => ({
-    type: SEARCH_BEER,
-    query
+  type: SEARCH_BEER,
+  query,
 })
 
 export const receiveBeer = res => ({
-    type: RECEIVE_BEER,
-    res
+  type: RECEIVE_BEER,
+  res,
 })
 
 export const receiveSearch = res => ({
-    type: RECEIVE_SEARCH,
-    res
+  type: RECEIVE_SEARCH,
+  res,
 })
 
 export const selectCategory = category => ({
-    type: SELECT_CATEGORY,
-    category
+  type: SELECT_CATEGORY,
+  category,
 })
 
 export const addEdit = body => ({
-    type: ADD_EDIT_REQUEST,
-    body
+  type: ADD_EDIT_REQUEST,
+  body,
 })
 
 export const addEditSuccess = res => ({
-    type: ADD_EDIT_SUCCESS,
-    res
+  type: ADD_EDIT_SUCCESS,
+  res,
 })
 
 export const addEditFailure = res => ({
-    type: ADD_EDIT_FAILURE,
-    res
+  type: ADD_EDIT_FAILURE,
+  res,
 })
 
 export const deleteRequest = () => ({
-    type: DELETE_REQUEST
+  type: DELETE_REQUEST,
 })
 
 export const deleteSuccess = res => ({
-    type: DELETE_SUCCESS,
-    res
+  type: DELETE_SUCCESS,
+  res,
 })
 
 export const deleteFailure = res => ({
-    type: DELETE_FAILURE,
-    res
+  type: DELETE_FAILURE,
+  res,
 })
 
 export const requestBeerPage = selectedBeer => ({
-    type: REQUEST_BEERPAGE,
-    selectedBeer
+  type: REQUEST_BEERPAGE,
+  selectedBeer,
 })
 
 export const receiveBeerPage = res => ({
-    type: RECEIVE_BEERPAGE,
-    res
+  type: RECEIVE_BEERPAGE,
+  res,
 })
 
 export const deselectBeer = () => ({
-    type: DESELECT_BEER
+  type: DESELECT_BEER,
 })
 
 export const resetSubmitStatus = () => ({
-    type: RESET_SUBMIT_STATUS
+  type: RESET_SUBMIT_STATUS,
 })
 
 export const fetchCategories = () => {
-    return (dispatch => {
-        dispatch(requestCategories());
-    return axios.get(process.env.REACT_APP_API_URL+'/categories/')
-    .then(res => dispatch(receiveCategories(res.data)))
-})
+  return dispatch => {
+    dispatch(requestCategories())
+    return axios
+      .get(process.env.REACT_APP_API_URL + '/categories/')
+      .then(res => dispatch(receiveCategories(res.data)))
+  }
 }
 
 export const searchBeer = query => {
-    return(dispatch => {
-        dispatch(queryBeer(query));
-        return axios.get(process.env.REACT_APP_API_URL+'/beers/search/?q='+query)
-        .then(res => {
-            dispatch(receiveSearch(res.data))})
-    })
+  return dispatch => {
+    dispatch(queryBeer(query))
+    return axios
+      .get(process.env.REACT_APP_API_URL + '/beers/search/?q=' + query)
+      .then(res => {
+        dispatch(receiveSearch(res.data))
+      })
+  }
 }
 
 export const fetchBeer = category => {
-    return (dispatch => {
+  return dispatch => {
     dispatch(selectCategory(category))
-    return axios.all([
-        axios.get(process.env.REACT_APP_API_URL+'/categories/'),
-        axios.get(process.env.REACT_APP_API_URL+'/beers/')
-        ])
-        .then(axios.spread((categories, beers) => {
-            let categoryObject = categories.data.filter(c => c.name === category)
-            if(categoryObject.length > 0){
-            let beersByCategory = beers.data.filter(b => b.category === categoryObject[0].url)
+    return axios
+      .all([
+        axios.get(process.env.REACT_APP_API_URL + '/categories/'),
+        axios.get(process.env.REACT_APP_API_URL + '/beers/'),
+      ])
+      .then(
+        axios.spread((categories, beers) => {
+          let categoryObject = categories.data.filter(c => c.name === category)
+          if (categoryObject.length > 0) {
+            let beersByCategory = beers.data.filter(
+              b => b.category === categoryObject[0].url
+            )
             dispatch(receiveBeer(beersByCategory))
-        } else {
-        dispatch(receiveBeer(''))
-    }
-        }))
-    })
+          } else {
+            dispatch(receiveBeer(''))
+          }
+        })
+      )
+  }
 }
 
 export const fetchBeerPage = selectedBeer => {
-    return (dispatch => {
-        dispatch(requestBeerPage(selectedBeer))
-    return axios.get(process.env.REACT_APP_API_URL+'/beers/')
-    .then(res => {
-        dispatch(receiveBeerPage(res.data.filter(b => b.name === selectedBeer)[0]))
+  return dispatch => {
+    dispatch(requestBeerPage(selectedBeer))
+    return axios.get(process.env.REACT_APP_API_URL + '/beers/').then(res => {
+      dispatch(
+        receiveBeerPage(res.data.filter(b => b.name === selectedBeer)[0])
+      )
     })
-})
+  }
 }
 
 export const deleteSomething = target => {
-    return(dispatch => {
-        dispatch(deleteRequest())
-        return axios.delete(target)
-        .then(res => {
-            dispatch(deleteSuccess(res.data))
-        })
-        .catch(err => dispatch(deleteFailure(err.response.data)))
-        })}
+  return dispatch => {
+    dispatch(deleteRequest())
+    return axios
+      .delete(target)
+      .then(res => {
+        dispatch(deleteSuccess(res.data))
+      })
+      .catch(err => dispatch(deleteFailure(err.response.data)))
+  }
+}
 
 export const postSomething = body => {
-    return (dispatch => {
-        const API_ENDPOINT = body => {
-            if(body.submitType === 'beer') { return '/beers/'}
-            else { return '/categories/' }
-        };
-        if(body.url) {
-            dispatch(addEdit(body))
-            return axios.put(body.url, body)
-            .then(res => {
-                return dispatch(addEditSuccess(res.data))
-            })
-            .catch(err => dispatch(addEditFailure(err.response.data)))
-        } else {
-            dispatch(addEdit(body))
-            return axios.post(process.env.REACT_APP_API_URL+API_ENDPOINT(body), body )
-            .then(res => dispatch(addEditSuccess(res.data)))
-            .catch(err => dispatch(addEditFailure(err.response.data)))
-        }
-    })
+  return dispatch => {
+    const API_ENDPOINT = body => {
+      if (body.submitType === 'beer') {
+        return '/beers/'
+      } else {
+        return '/categories/'
+      }
+    }
+    if (body.url) {
+      dispatch(addEdit(body))
+      return axios
+        .put(body.url, body)
+        .then(res => {
+          return dispatch(addEditSuccess(res.data))
+        })
+        .catch(err => dispatch(addEditFailure(err.response.data)))
+    } else {
+      dispatch(addEdit(body))
+      return axios
+        .post(process.env.REACT_APP_API_URL + API_ENDPOINT(body), body)
+        .then(res => dispatch(addEditSuccess(res.data)))
+        .catch(err => dispatch(addEditFailure(err.response.data)))
+    }
+  }
 }
