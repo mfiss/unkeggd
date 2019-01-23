@@ -1,6 +1,6 @@
 # Unkeggd
 
-[Demo]http://unkeggd.herokuapp.com
+[Demo](http://unkeggd.herokuapp.com)
 
 This is an app I made to interact with a beer API consisting of beers and categories. In it, you can
 * GET categories and beers
